@@ -2,7 +2,9 @@
 	<!-- INFINITE SCROLL -->
 	<div class="container">
 		<h1>Hello World, bitches!</h1>
-		<div class="container-card-pokemon">
+		<p>{{ name }}</p>
+
+		<!-- <div class="container-card-pokemon">
 			<div v-for="count in responseApi" :key="this.count++" class="card-pokemon">
 				<img :src="count.sprites.front_default" alt="Pokemon"/>
 				<br>
@@ -11,7 +13,7 @@
 					<span> #{{ count.id }}</span>
 				</div>
 			</div>
-		</div>
+		</div> -->
 	</div>
 	
 </template>
@@ -23,18 +25,23 @@ import axios from 'axios';
 export default {
 	name: 'HelloWorld',
 
+	props: {
+		responseApi: '',
+	},
+
 	data() {
 		return {
-			responseApi: [],
+			
+			pokemons: [],
 			name: '',
-			image: '',
-			id: 0,
-			count: 1
+			/* image: '',
+			id: 0,*/
+			count: 1,
 		}
 	},
 
 	methods: {
-		getApi() {
+		/* getApi() {
 			for(let i = 1; i <= 25; i++) {
 				const urlAPI = `https://pokeapi.co/api/v2/pokemon/${i}`;
 				axios
@@ -49,7 +56,33 @@ export default {
 					});
 			}
 			
+		}, */
+
+		getApi() {
+			for(let i = 1; i <= 15; i++) {
+				// const urlAPI = `https://pokeapi.co/api/v2/pokemon/${i}`;
+				const urlAPI = `https://pokeapi.co/api/v2/pokemon/${i}`;
+				axios
+					.get( urlAPI )
+					.then( ( response ) => {
+						console.log(response.data);
+						this.responseApi.push(response.data);
+						console.log("responseeeeeee", this.responseApi);
+						console.log("responseeeeeee type", typeof(this.responseApi));
+					})
+					.catch( ( error ) => {
+						console.log( error );
+					});
+				
+			}
+
+			/* this.pokemons = JSON.parse(this.responseApi);
+			console.log('Pokemons', this.pokemons); */
 		},
+
+		showPokemon() {
+			this.name = this.responseApi[0].name;
+		}
 	},
 
 	mounted() {
